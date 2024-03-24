@@ -1,0 +1,32 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE TABLE IF NOT EXISTS accounts(
+    id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+    document_number TEXT NOT NULL UNIQUE,
+    balance DECIMAL NOT NULL CHECK (balance >= 0),
+    created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+DO $$
+    BEGIN
+        IF NOT EXISTS (select 1 from pg_type where typname = 'operation') THEN
+            CREATE TYPE operation AS ENUM ('NORMAL_PURCHASE', 'PURCHASE_WITH_INSTALLMENTS', 'WITHDRAWAL', 'CREDIT_VOUCHER');
+        END IF;
+    END
+$$;
+
+CREATE TABLE IF NOT EXISTS operation_types(
+    id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name operation NOT NULL UNIQUE,
+    description TEXT NOT NULL,
+    created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS transactions(
+    id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+    account_id UUID REFERENCES accounts,
+    operation_type_id UUID REFERENCES operation_types,
+    amount DECIMAL NOT NULL,
+    created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
