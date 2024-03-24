@@ -2,7 +2,6 @@ package com.test.service.exceptions;
 
 import static com.test.service.exceptions.ErrorCodes.ACCOUNT_BALANCE_INSUFFICIENT;
 
-import com.test.service.enums.Operation;
 import org.springframework.http.HttpStatus;
 
 public class InsufficientBalanceException extends BusinessException {

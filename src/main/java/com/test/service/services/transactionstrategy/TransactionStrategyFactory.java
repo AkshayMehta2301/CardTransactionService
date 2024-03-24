@@ -27,6 +27,12 @@ public class TransactionStrategyFactory {
         }
     }
 
+    /**
+     * Get strategy instance based on operation
+     *
+     * @param operation {@link Operation}
+     * @return {@link ITransactionStrategy}
+     */
     public ITransactionStrategy getTransactionStrategy(Operation operation) {
         if (transactionStrategyMap.containsKey(operation)) {
             return transactionStrategyMap.get(operation);

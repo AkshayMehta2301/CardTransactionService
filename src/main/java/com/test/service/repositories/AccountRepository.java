@@ -10,8 +10,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface AccountRepository extends JpaRepository<Account, UUID> {
 
+    /**
+     * Save account to database
+     *
+     * @param account {@link Account}
+     * @return {@link Account}
+     */
     Account save(Account account);
 
+    /**
+     * Get account by id with exclusive lock
+     *
+     * @param id {@link UUID}
+     * @return {@link Optional} of {@link Account}
+     */
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Transactional
     Optional<Account> findById(UUID id);

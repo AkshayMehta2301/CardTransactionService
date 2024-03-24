@@ -32,16 +32,25 @@ public class AccountController {
 
     private final AccountService accountService;
 
-    @Operation(summary = "Create account",
+    @Operation(
+        summary = "Create account",
+        description = "Create account with zero balance.",
         requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
             content = @Content(mediaType = "application/json",
                 schema = @Schema(implementation = CreateAccountRequest.class))),
-        responses = {@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            schema = @Schema(implementation = AccountResponse.class))),
-            @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "500", content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = ErrorResponse.class)))
+        responses = {
+            @ApiResponse(
+                responseCode = "200",
+                content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = AccountResponse.class))),
+            @ApiResponse(
+                responseCode = "400",
+                content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                responseCode = "500",
+                content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ErrorResponse.class)))
         }
     )
     @PostMapping
@@ -49,13 +58,21 @@ public class AccountController {
         return new ResponseEntity<>(accountService.createAccount(request), HttpStatus.OK);
     }
 
-    @Operation(summary = "Get account by Id",
-        parameters = @Parameter(name = "account_id", in = ParameterIn.PATH, required = true, example = "ef5625c1-dc1a-4db8-9acf-e082b5501f5e"),
-        responses = {@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            schema = @Schema(implementation = Account.class))),
-            @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = ErrorResponse.class)))
-            }
+    @Operation(
+        summary = "Get account by Id",
+        description = "Get account details based on the provided accountId.",
+        parameters = @Parameter(name = "account_id", in = ParameterIn.PATH, required = true,
+            example = "ef5625c1-dc1a-4db8-9acf-e082b5501f5e"),
+        responses = {
+            @ApiResponse(
+                responseCode = "200",
+                content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = Account.class))),
+            @ApiResponse(
+                responseCode = "404",
+                content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ErrorResponse.class)))
+        }
     )
     @GetMapping("/{account_id}")
     public ResponseEntity<Account> getAccount(@PathVariable("account_id") UUID accountId) {
