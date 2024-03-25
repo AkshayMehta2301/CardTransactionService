@@ -7,13 +7,16 @@ import com.experiment.service.entities.OperationType;
 import com.experiment.service.exceptions.BusinessException;
 import com.experiment.service.exceptions.OperationTypeAlreadyExistException;
 import com.experiment.service.exceptions.OperationTypeNotFoundException;
-import com.experiment.service.services.OperationTypeService;
 import com.experiment.service.repositories.OperationTypeRepository;
+import com.experiment.service.services.OperationTypeService;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +31,10 @@ public class OperationTypeServiceImpl implements OperationTypeService {
             .description(request.getDescription())
             .build();
         this.saveOperationType(operationType);
+        return buildOperationTypeResponse(operationType);
+    }
+
+    private OperationTypeResponse buildOperationTypeResponse(OperationType operationType) {
         return OperationTypeResponse.builder()
             .id(operationType.getId())
             .name(operationType.getName())
@@ -39,6 +46,18 @@ public class OperationTypeServiceImpl implements OperationTypeService {
     public OperationType getOperationTypeById(UUID id) {
         return operationTypeRepository.findById(id)
             .orElseThrow(() -> new OperationTypeNotFoundException(id));
+    }
+
+    @Override
+    public List<OperationTypeResponse> getAllOperationType() {
+        List<OperationType> operationTypes = operationTypeRepository.findAll();
+        List<OperationTypeResponse> operationTypeResponses = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(operationTypes)) {
+            for (OperationType operationType : operationTypes) {
+                operationTypeResponses.add(buildOperationTypeResponse(operationType));
+            }
+        }
+        return operationTypeResponses;
     }
 
     private OperationType saveOperationType(OperationType operationType) {

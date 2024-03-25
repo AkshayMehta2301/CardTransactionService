@@ -1,8 +1,9 @@
 package com.experiment.service.services;
 
 import com.experiment.service.dtos.requests.CreateOperationTypeRequest;
-import com.experiment.service.entities.OperationType;
 import com.experiment.service.dtos.responses.OperationTypeResponse;
+import com.experiment.service.entities.OperationType;
+import java.util.List;
 import java.util.UUID;
 
 public interface OperationTypeService {
@@ -22,4 +23,12 @@ public interface OperationTypeService {
      * @return {@link OperationType}
      */
     OperationType getOperationTypeById(UUID id);
+
+
+    /**
+     * Get all operation type
+     *
+     * @return {@link List} of {@link OperationTypeResponse}
+     */
+    List<OperationTypeResponse> getAllOperationType();
 }

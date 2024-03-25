@@ -3,7 +3,6 @@ package com.experiment.service;
 import static org.mockito.Mockito.RETURNS_SMART_NULLS;
 import static org.mockito.Mockito.mock;
 
-import com.experiment.service.entities.Transaction;
 import com.experiment.service.repositories.AccountRepository;
 import com.experiment.service.repositories.OperationTypeRepository;
 import com.experiment.service.repositories.TransactionRepository;

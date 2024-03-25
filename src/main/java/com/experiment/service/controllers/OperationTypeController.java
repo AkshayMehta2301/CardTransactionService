@@ -9,10 +9,12 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,5 +53,25 @@ public class OperationTypeController {
     public ResponseEntity<OperationTypeResponse> createOperationType(@Valid @RequestBody
                                                                      CreateOperationTypeRequest request) {
         return new ResponseEntity<>(operationTypeService.createOperationType(request), HttpStatus.OK);
+    }
+
+    @Operation(
+        summary = "Get all operation type.",
+        description = "Get all operation type. Operation type will be added by migration, " +
+            "so with help of this APIs response, we can pass operationTypeId for various transactions.",
+        responses = {
+            @ApiResponse(
+                responseCode = "200",
+                content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = List.class))),
+            @ApiResponse(
+                responseCode = "500",
+                content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ErrorResponse.class)))
+        }
+    )
+    @GetMapping
+    public ResponseEntity<List<OperationTypeResponse>> getAllOperationType() {
+        return new ResponseEntity<>(operationTypeService.getAllOperationType(), HttpStatus.OK);
     }
 }

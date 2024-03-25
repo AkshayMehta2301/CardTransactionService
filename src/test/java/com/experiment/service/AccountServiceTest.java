@@ -3,15 +3,15 @@ package com.experiment.service;
 import static com.experiment.service.configurations.ApplicationConstants.ACCOUNT_DOCUMENT_NUMBER_UNIQUE_KEY;
 import static com.experiment.service.exceptions.ErrorCodes.ACCOUNT_ALREADY_EXIST;
 import static com.experiment.service.exceptions.ErrorCodes.ACCOUNT_NOT_FOUND;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.util.AssertionErrors.assertEquals;
-import static org.springframework.test.util.AssertionErrors.assertNotNull;
-import static org.springframework.test.util.AssertionErrors.fail;
 
 import com.experiment.service.dtos.requests.CreateAccountRequest;
 import com.experiment.service.dtos.responses.AccountResponse;
@@ -56,7 +56,6 @@ public class AccountServiceTest {
     private static final BigDecimal TEST_BALANCE = BigDecimal.TEN;
     private static final HttpStatus NOT_FOUND = HttpStatus.NOT_FOUND;
     private static final HttpStatus BAD_REQUEST = HttpStatus.BAD_REQUEST;
-    private static final HttpStatus INTERNAL_SERVER_ERROR = HttpStatus.INTERNAL_SERVER_ERROR;
 
     @BeforeEach
     public void setup() {
@@ -80,7 +79,7 @@ public class AccountServiceTest {
         AccountResponse accountResponse =
             accountService.createAccount(buildCreateAccountRequest());
 
-        assertNotNull("accountResponse is null", accountResponse);
+        assertNotNull(accountResponse);
         verify(accountRepository, times(1))
             .save(accountArgumentCaptor.capture());
         assertCreatedAccount(accountArgumentCaptor.getValue());
@@ -97,7 +96,7 @@ public class AccountServiceTest {
 
         Account account = accountService.getAccountById(TEST_ID);
 
-        assertNotNull("account is null", account);
+        assertNotNull(account);
         verify(accountRepository, times(1)).findById(eq(TEST_ID));
         assertAccount(account);
     }
@@ -111,8 +110,8 @@ public class AccountServiceTest {
             fail("Expected AccountNotFound exception to be thrown");
         } catch (AccountNotFoundException e) {
             verify(accountRepository, times(1)).findById(eq(TEST_ID));
-            assertEquals("Status code not matching", NOT_FOUND, e.getHttpCode());
-            assertEquals("Error code not matching", ACCOUNT_NOT_FOUND.name(), e.getCode());
+            assertEquals(NOT_FOUND, e.getHttpCode());
+            assertEquals(ACCOUNT_NOT_FOUND.name(), e.getCode());
         }
     }
 
@@ -127,7 +126,7 @@ public class AccountServiceTest {
 
         Account account = accountService.saveAccount(buildAccount(TEST_ID));
 
-        assertNotNull("account is null", account);
+        assertNotNull(account);
         verify(accountRepository, times(1))
             .save(accountArgumentCaptor.capture());
         assertAccount(account);
@@ -151,8 +150,8 @@ public class AccountServiceTest {
             verify(accountRepository, times(1))
                 .save(accountArgumentCaptor.capture());
             assertAccount(accountArgumentCaptor.getValue());
-            assertEquals("Status code not matching", BAD_REQUEST, e.getHttpCode());
-            assertEquals("Error code not matching", ACCOUNT_ALREADY_EXIST.name(), e.getCode());
+            assertEquals(BAD_REQUEST, e.getHttpCode());
+            assertEquals(ACCOUNT_ALREADY_EXIST.name(), e.getCode());
         }
     }
 
@@ -186,25 +185,19 @@ public class AccountServiceTest {
     }
 
     private void assertCreatedAccount(Account account) {
-        assertEquals("Document number not matching", TEST_DOCUMENT_NUMBER,
-            account.getDocumentNumber());
-        assertEquals("Balance not matching", TEST_ZERO_BALANCE,
-            account.getBalance());
+        assertEquals(TEST_DOCUMENT_NUMBER, account.getDocumentNumber());
+        assertEquals(TEST_ZERO_BALANCE, account.getBalance());
     }
 
     private void assertCreatedAccountResponse(AccountResponse accountResponse) {
-        assertEquals("Id not matching", TEST_ID, accountResponse.getId());
-        assertEquals("Document number not matching", TEST_DOCUMENT_NUMBER,
-            accountResponse.getDocumentNumber());
-        assertEquals("Balance not matching", TEST_ZERO_BALANCE,
-            accountResponse.getBalance());
+        assertEquals(TEST_ID, accountResponse.getId());
+        assertEquals(TEST_DOCUMENT_NUMBER, accountResponse.getDocumentNumber());
+        assertEquals(TEST_ZERO_BALANCE, accountResponse.getBalance());
     }
 
     private void assertAccount(Account account) {
-        assertEquals("Id not matching", TEST_ID, account.getId());
-        assertEquals("Document number not matching", TEST_DOCUMENT_NUMBER,
-            account.getDocumentNumber());
-        assertEquals("Balance not matching", TEST_BALANCE,
-            account.getBalance());
+        assertEquals(TEST_ID, account.getId());
+        assertEquals(TEST_DOCUMENT_NUMBER, account.getDocumentNumber());
+        assertEquals(TEST_BALANCE, account.getBalance());
     }
 }

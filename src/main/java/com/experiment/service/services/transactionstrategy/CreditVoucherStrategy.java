@@ -5,8 +5,8 @@ import com.experiment.service.dtos.responses.TransactionResponse;
 import com.experiment.service.entities.Account;
 import com.experiment.service.entities.Transaction;
 import com.experiment.service.enums.Operation;
-import com.experiment.service.services.AccountService;
 import com.experiment.service.repositories.TransactionRepository;
+import com.experiment.service.services.AccountService;
 import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,12 +23,14 @@ public class CreditVoucherStrategy implements ITransactionStrategy {
     @Transactional(rollbackFor = Exception.class)
     public TransactionResponse createTransaction(CreateTransactionRequest request) {
         Account account = accountService.getAccountById(request.getAccountId());
+
         Transaction transaction = Transaction.builder()
             .accountId(request.getAccountId())
             .operationTypeId(request.getOperationTypeId())
             .amount(request.getAmount())
             .build();
         transactionRepository.save(transaction);
+
         BigDecimal updatedBalance = account.getBalance().add(request.getAmount());
         account.setBalance(updatedBalance);
         accountService.saveAccount(account);

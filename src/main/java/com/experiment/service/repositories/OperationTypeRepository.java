@@ -1,6 +1,7 @@
 package com.experiment.service.repositories;
 
 import com.experiment.service.entities.OperationType;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,4 +23,11 @@ public interface OperationTypeRepository extends JpaRepository<OperationType, UU
      * @return {@link Optional} of {@link OperationType}
      */
     Optional<OperationType> findById(UUID id);
+
+    /**
+     * Get all operation type
+     *
+     * @return {@link List} of {@link OperationType}
+     */
+    List<OperationType> findAll();
 }
