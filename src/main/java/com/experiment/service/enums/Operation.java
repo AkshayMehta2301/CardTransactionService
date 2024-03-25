@@ -8,6 +8,8 @@ public enum Operation {
 
     private static Map<Operation, Operation> strategyMap;
 
+    // To update account balance differently for each operation,
+    // mapping operation with different strategy
     static {
         strategyMap = new HashMap<>();
         strategyMap.put(NORMAL_PURCHASE, WITHDRAWAL);
