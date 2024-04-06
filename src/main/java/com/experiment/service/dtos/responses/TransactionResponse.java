@@ -33,4 +33,8 @@ public class TransactionResponse {
     @JsonProperty("amount")
     @Schema(name = "amount", example = "100", description = "Amount of transaction")
     private BigDecimal amount;
+
+    @JsonProperty("balance")
+    @Schema(name = "balance", example = "10", description = "Balance")
+    private BigDecimal balance;
 }

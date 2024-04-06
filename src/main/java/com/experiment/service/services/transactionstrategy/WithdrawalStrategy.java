@@ -26,14 +26,13 @@ public class WithdrawalStrategy implements ITransactionStrategy {
     @Transactional(rollbackFor = Exception.class)
     public TransactionResponse createTransaction(CreateTransactionRequest request) {
         Account account = accountService.getAccountById(request.getAccountId());
-        if (account.getBalance().compareTo(request.getAmount()) < 0 ) {
-            throw new InsufficientBalanceException();
-        }
 
+        BigDecimal negativeAmount = request.getAmount().multiply(BIG_DECIMAL_NEGATIVE_ONE);
         Transaction transaction = Transaction.builder()
             .accountId(request.getAccountId())
             .operationTypeId(request.getOperationTypeId())
-            .amount(request.getAmount().multiply(BIG_DECIMAL_NEGATIVE_ONE))
+            .amount(negativeAmount)
+            .balance(negativeAmount)
             .build();
         transactionRepository.save(transaction);
 
@@ -46,6 +45,7 @@ public class WithdrawalStrategy implements ITransactionStrategy {
             .accountId(transaction.getAccountId())
             .operationTypeId(transaction.getOperationTypeId())
             .amount(transaction.getAmount())
+            .balance(transaction.getBalance())
             .build();
     }
 

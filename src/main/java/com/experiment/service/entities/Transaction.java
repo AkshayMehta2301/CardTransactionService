@@ -37,6 +37,9 @@ public class Transaction {
     @Column(name = "amount")
     private BigDecimal amount;
 
+    @Column(name = "balance")
+    private BigDecimal balance;
+
     @CreationTimestamp
     @Column(name = "created")
     private Timestamp created;
