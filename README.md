@@ -2,7 +2,7 @@
 
 This microservice deals with **Card Transactions**.
 
-- This service consist of 3 entities : Account, OperationType and Transaction
+- This service consist of 3 entities : Account, OperationType and Transaction.
 - **Account** mapped to user and will store account balance.
 - **OperationType** stores various supported operation by service.
 - **Transaction** stores the operation done for particular account.
